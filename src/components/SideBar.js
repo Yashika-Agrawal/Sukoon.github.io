@@ -25,9 +25,9 @@ export default function SideBar() {
           <FontAwesomeIcon title="Books" icon={faBookOpenReader} />
         </div>
       </Link>
-      <Link to="/music">
+      <Link to="/songs">
         <div className="text-white text-3xl text-center mt-10 p-3 rounded-xl cursor-pointer hover:bg-purple-800">
-          <FontAwesomeIcon title="Music" icon={faMusic} />
+          <FontAwesomeIcon title="Songs" icon={faMusic} />
         </div>
       </Link>
       <Link to="/graph">

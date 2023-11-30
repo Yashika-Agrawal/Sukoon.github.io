@@ -1,7 +1,7 @@
 import { MoodTracker } from "../components/MoodTracker";
 import { Welcome } from "../components/Welcome";
 import { Quote } from "../components/Quote";
-import { Music } from "../components/Music";
+import Music from "../components/Music";
 import { Explore } from "../components/Explore";
 import SideBar from "../components/SideBar";
 

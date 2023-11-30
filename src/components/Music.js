@@ -1,5 +1,6 @@
-export function Music() {
-  // Dummy data for music playlist
+import React from "react";
+
+const Music = () => {
   const playlist = [
     { title: "Song 1", artist: "Artist 1" },
     { title: "Song 2", artist: "Artist 2" },
@@ -34,4 +35,6 @@ export function Music() {
       </div>
     </div>
   );
-}
+};
+
+export default Music;

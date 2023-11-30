@@ -3,14 +3,43 @@ import ReactDOM from "react-dom/client";
 import "./index.css";
 import App from "./App";
 import reportWebVitals from "./reportWebVitals";
-import { BrowserRouter } from "react-router-dom";
+import { createBrowserRouter, RouterProvider } from "react-router-dom";
+import ErrorPage from "./Pages/error-page";
+import Journal from "./Pages/Journal";
+import Book from "./Pages/Book";
+import Songs from "./Pages/Songs";
+import Graph from "./Pages/Graph";
+const router = createBrowserRouter([
+  {
+    path: "/",
+    element: <App />,
+    errorElement: <ErrorPage />,
+    children: [
+      {
+        path: "/journal/",
+        element: <Journal />,
+      },
+      {
+        path: "/book/",
+        element: <Book />,
+      },
+      {
+        path: "/songs/",
+        element: <Songs />,
+      },
+      {
+        path: "/graph/",
+        element: <Graph />,
+      },
+    ],
+  },
+]);
 
 const root = ReactDOM.createRoot(document.getElementById("root"));
+
 root.render(
   <React.StrictMode>
-    <BrowserRouter>
-      <App />
-    </BrowserRouter>
+    <RouterProvider router={router} />
   </React.StrictMode>
 );
 
