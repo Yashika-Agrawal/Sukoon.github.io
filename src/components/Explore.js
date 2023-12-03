@@ -28,7 +28,7 @@ export function Explore() {
     },
   ];
   return (
-    <div className="bg-purple-400 h-screen mt-1 rounded-lg flex flex-col">
+    <div className="ml-10 bg-purple-400 h-screen mt-1 rounded-lg flex flex-col">
       <h1 className="text-white font-bold text-center mt-3 text-5xl font-poppins">
         Explore Today
       </h1>

@@ -1,7 +1,12 @@
-import React from "react";
+import SideBar from "../components/SideBar";
 
-const Songs = () => {
-  return <div>Songsss</div>;
-};
-
-export default Songs;
+export default function Songs() {
+  return (
+    <>
+      <div className="h-screen bg-purple-200 flex flex-row">
+        <SideBar />
+        <h1>Songs</h1>
+      </div>
+    </>
+  );
+}
