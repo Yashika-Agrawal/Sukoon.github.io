@@ -1,0 +1,22 @@
+.jodit-status-bar {
+  visibility: hidden;
+}
+.jodit-react-container {
+  max-height: 100%;
+}
+.jodit-wysiwyg {
+  min-height: 70vh !important;
+  max-height: 80vh;
+  overflow-y: auto;
+  padding: 30px !important;
+}
+.jodit-workspace {
+  overflow: hidden;
+  margin: 20px !important;
+}
+.jodit-container {
+  overflow: hidden;
+}
+/* .jodit-workplace {
+  min-height: 100vh !important;
+} */

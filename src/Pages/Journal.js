@@ -1,12 +1,42 @@
+import { useState } from "react";
+import Editor from "../components/Editor";
 import SideBar from "../components/SideBar";
+import "../App.css";
+const config = {
+  buttons: [
+    "bold",
+    "italic",
+    "underline",
+    "|",
+    "ul",
+    "ol",
+    "eraser",
+    "|",
+    "fontsize",
+    "brush",
 
+    "image",
+    "table",
+
+    "link",
+    "|",
+    "align",
+    "|",
+    "undo",
+    "redo",
+    "|",
+
+    "fullsize",
+  ],
+};
 export default function Journal() {
+  const [value, setValue] = useState("");
   return (
     <>
-      <div className="h-screen bg-purple-200 flex flex-row">
+      <div className="h-screen bg-purple-200 flex flex-row overflow-hidden">
         <SideBar />
 
-        <div className="bg-white h-screen w-1/4 flex flex-col border-r-2">
+        <div className="bg-white h-screen w-1/4 flex flex-col border-r-2 ">
           <div className=" justify-center bg-gray-100 py-5 text-center ">
             <input
               type="text"
@@ -27,9 +57,8 @@ export default function Journal() {
             <div className=" w-2/3 py-5  border-l-violet-400">Entry</div>
           </div>
         </div>
-        <div className="bg-white h-screen w-3/4 flex flex-col border-r-2">
+        <div className="bg-white h-screen w-3/4 flex flex-col border-r-2 overflow-hidden">
           <div className=" text-2xl items-center space-x-8 justify-end flex flex-row border-b-2  bg-gray-100  text-center ">
-            
             <div className="cursor-pointer" title="EDIT">
               ✏️
             </div>
@@ -42,6 +71,16 @@ export default function Journal() {
             >
               +
             </div>
+          </div>
+          <div className=" justify-center bg-gray-100 py-3 text-center px-2">
+            <input
+              type="text"
+              className="rounded-xl py-2 px-3 w-full border-2 border-gray-300 text-2xl"
+              placeholder="Enter your Title..."
+            />
+          </div>
+          <div className=" h-screen ">
+            <Editor setValue={setValue} config={config} />
           </div>
         </div>
       </div>
