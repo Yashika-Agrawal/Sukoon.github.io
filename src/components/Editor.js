@@ -2,13 +2,13 @@ import React, { useRef } from "react";
 import JoditEditor from "jodit-react";
 import "../App.css";
 
-const Editor = ({ setValue, config }) => {
+const Editor = ({ onChange, config }) => {
   const editor = useRef(null);
 
   return (
     <JoditEditor
       ref={editor}
-      onChange={(content) => setValue(content)}
+      onChange={onChange}
       config={config}
       style={{ flex: 1 }}
     />
