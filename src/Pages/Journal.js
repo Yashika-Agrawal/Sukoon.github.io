@@ -2,6 +2,7 @@ import { useState } from "react";
 import Editor from "../components/Editor";
 import SideBar from "../components/SideBar";
 import "../App.css";
+
 const config = {
   buttons: [
     "bold",
@@ -33,12 +34,21 @@ export default function Journal() {
   const [title, setTitle] = useState("");
   const [content, setContent] = useState("");
   const [entries, setEntries] = useState([]);
-  function handleAddEntry() {
+  let [clicked,setClicked]=useState("")
+  function handleAddEntry(content) {
+    // console.log("cont",content)
+    // let str=content;
+    let date1=new Date();
     const newEntry = {
+      
+      // id :  Time(),
       title: title,
-      content: content,
-      date: new Date(),
+      
+      cont: content,
+      date: date1,
+      upDate:date1,
     };
+    console.log("id",newEntry.date)
     setEntries([...entries, newEntry]);
     setTitle("");
     setContent("");
@@ -47,17 +57,24 @@ export default function Journal() {
     <>
       <div className="h-screen bg-purple-200 flex flex-row overflow-hidden">
         <SideBar />
-        <SearchJournal entries={entries} />
-        <Workspace
+        <SearchJournal entries={entries} setContent={setContent} content={content} title={title} setTitle={setTitle} setClicked={setClicked} clicked={clicked}/>
+         <Workspace
+         entries={entries}
+        setEntries={setEntries}
           title={title}
           setTitle={setTitle}
-          onAddEntry={handleAddEntry}
-        />
+          content={content}
+          setContent={setContent}
+          setClicked={setClicked}
+          clicked={clicked}
+          onAddEntry={(content)=>handleAddEntry(content) }
+        /> 
       </div>
     </>
   );
 }
-function SearchJournal({ entries }) {
+function SearchJournal({ entries,setContent,content,title,setTitle ,setClicked,clicked}) {
+  
   const months = [
     "Jan",
     "Feb",
@@ -82,18 +99,47 @@ function SearchJournal({ entries }) {
           placeholder="Search your Journal"
         />
       </div>
-      {entries.map((entry) => (
-        <div
+      {entries.map((entry,idx) => (
+        
+        <div  onClick={()=>{
+
+          if(clicked==entry.date){
+            setClicked("");
+            setContent("")
+          setTitle("")
+
+          }
+          else{
+            setClicked(entry.date)
+            console.log("set",setContent)
+          setContent(entry.cont)
+          setTitle(entry.title)
+          console.log("setcon",content)
+          }
+
+           
+          // console.log(entry.cont)
+          
+         
+        }}
           key={entry.date.getTime()}
           className="mb-1 border-b-2 border-b-violet-400 flex justify-center bg-violet-300 text-center   cursor-pointer"
-        >
+       style={{backgroundColor:clicked==entry.date?"red":""}} >
           <div className=" w-1/3 py-5  border-r-2 border-r-violet-400 text-lg">
             <p>{`${entry.date.getDate()} ${months[entry.date.getMonth()]}`} </p>
           </div>
-          <div className=" w-2/3 py-5  border-l-violet-400  text-lg">
+          <div className=" w-2/3 py-5  border-l-violet-400  text-lg flex-col ">
+           <div className="h-5/6">
             {entry.title}
+            </div>
+            <div>
+            <p className="text-xs " style={{fontSize:"8px"}}>{`upd: ${entry.upDate.getHours()}:${entry.upDate.getMinutes()},${entry.upDate.getDate()} ${months[entry.upDate.getMonth()]}`} </p>
+            </div>
           </div>
+          
         </div>
+       
+        
       ))}
 
       {/* <div className=" border-b-2 border-b-violet-400 flex justify-center bg-violet-300 text-center   cursor-pointer">
@@ -103,32 +149,57 @@ function SearchJournal({ entries }) {
     </div>
   );
 }
-function Workspace({ title, setTitle, onAddEntry }) {
-  const [content, setContent] = useState("");
+function Workspace({ title, setTitle, onAddEntry,content,setContent ,entries,setEntries,clicked,setClicked}) {
+  // const [content, setContent] = useState("");
   function handleTitle(e) {
     console.log(title);
     setTitle(e.target.value);
   }
   function handleClick() {
+    // console.log("cont",content)
     setTitle(title);
-    setContent(content);
-    onAddEntry();
+    // setContent(content);
+    onAddEntry(content);
     setTitle("");
     setContent("");
   }
   return (
     <div className="bg-white h-screen w-3/4 flex flex-col border-r-2 overflow-hidden">
       <div className=" text-2xl items-center space-x-8 justify-end flex flex-row border-b-2  bg-gray-100  text-center ">
-        <div className="cursor-pointer" title="EDIT">
+        <div onClick={()=>{
+          let date=new Date();
+          entries=entries.map((obj)=>{
+            if(obj.date==clicked){
+              obj.upDate=date;
+              obj.title=title;
+              obj.cont=content;
+            }
+            return obj
+         })
+         setEntries(entries);
+         setClicked("")
+         setContent("")
+         setTitle("")
+        }} className="cursor-pointer" title="EDIT">
           ✏️
         </div>
-        <div className="cursor-pointer" title="Delete">
+        <div onClick={()=>{
+          entries=entries.filter((obj)=>{
+             return obj.date!=clicked;
+          })
+          setEntries(entries);
+          // setClicked("")
+          setContent("")
+          setTitle("")
+        }} className="cursor-pointer" title="Delete">
           🗑️
         </div>
         <div
           className=" cursor-pointer rounded-l-lg bg-purple-500 p-5 px-6 text-white font-bold"
           title="NEW"
-          onClick={handleClick}
+          onClick={()=>{
+            setClicked("");
+            handleClick()}}
         >
           +
         </div>
@@ -143,7 +214,7 @@ function Workspace({ title, setTitle, onAddEntry }) {
         />
       </div>
       <div className=" h-screen ">
-        <Editor onChange={(content) => setContent(content)} config={config} />
+        <Editor setContent={ setContent}content={content} config={config} />
       </div>
     </div>
   );
