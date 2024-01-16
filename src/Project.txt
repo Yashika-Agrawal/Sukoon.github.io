@@ -1,0 +1,37 @@
+
+
+-App
+   -Home
+        -SideBar
+        -Welcome
+        -MoodTracker
+        -Explore
+        -Quotes
+        -Music
+
+   -Journals
+        -SideBar
+        -SearchJournal
+             -SearchBar
+             -Enteries
+                 -date
+                 -EntryHeading
+        -WorkSpace
+             -HeadBar
+                 -Edit
+                 -Delete
+                 -Add
+             -TittleInput
+             -Editor
+                 -joditEditor
+
+
+   -Books
+        -SideBar
+   -Songs
+        -SideBar
+   -Graph
+        -SideBar
+
+
+
