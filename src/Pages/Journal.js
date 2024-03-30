@@ -4,7 +4,7 @@ import SideBar from "../components/SideBar";
 import "../App.css";
 import DeleteJournal from "../components/DeleteJournal";
 import { Await } from "react-router-dom";
-
+import { useAuth0 } from "@auth0/auth0-react";
 
 const config = {
   buttons: [
@@ -34,6 +34,9 @@ const config = {
   ],
 };
 export default function Journal() {
+  const { logout } = useAuth0();
+  const { loginWithRedirect, isAuthenticated } = useAuth0();
+
   const [title, setTitle] = useState("");
   const [content, setContent] = useState("");
   const [entries, setEntries] = useState([]);
@@ -43,6 +46,8 @@ export default function Journal() {
 
 
   function handleAddEntry(content) {
+
+  
     // console.log("cont",content)
     // let str=content;
     let date1=new Date();
@@ -60,7 +65,18 @@ export default function Journal() {
     setTitle("");
     setContent("");
   }
+
+if(!isAuthenticated){
+
+ return(
+ <div className="h-screen bg-purple-200 flex flex-row overflow-hidden">
+  <SideBar></SideBar>
+  <>Bhai login krle </></div>
+  )
+}
   return (
+    
+
     <>
       <div className="h-screen bg-purple-200 flex flex-row overflow-hidden">
         <SideBar />
