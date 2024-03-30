@@ -2,7 +2,6 @@ import { useState } from "react";
 import Editor from "../components/Editor";
 import SideBar from "../components/SideBar";
 import "../App.css";
-import DeleteJournal from "../components/DeleteJournal";
 
 const config = {
   buttons: [
@@ -152,8 +151,6 @@ function SearchJournal({ entries,setContent,content,title,setTitle ,setClicked,c
 }
 function Workspace({ title, setTitle, onAddEntry,content,setContent ,entries,setEntries,clicked,setClicked}) {
   // const [content, setContent] = useState("");
- 
- let [del,setDel]=useState(false);
   function handleTitle(e) {
     console.log(title);
     setTitle(e.target.value);
@@ -167,12 +164,7 @@ function Workspace({ title, setTitle, onAddEntry,content,setContent ,entries,set
     setContent("");
   }
   return (
-    <>
-    
     <div className="bg-white h-screen w-3/4 flex flex-col border-r-2 overflow-hidden">
-   {
-     del && <DeleteJournal del={del}setDel={setDel} entries={entries} setEntries={setEntries} clicked={clicked} setContent={setContent} setTitle={setTitle}></DeleteJournal>
-   }
       <div className=" text-2xl items-center space-x-8 justify-end flex flex-row border-b-2  bg-gray-100  text-center ">
         <div onClick={()=>{
           let date=new Date();
@@ -192,7 +184,14 @@ function Workspace({ title, setTitle, onAddEntry,content,setContent ,entries,set
           ✏️
         </div>
         <div onClick={()=>{
-          if(clicked){setDel(true)}}} className="cursor-pointer" title="Delete">
+          entries=entries.filter((obj)=>{
+             return obj.date!=clicked;
+          })
+          setEntries(entries);
+          // setClicked("")
+          setContent("")
+          setTitle("")
+        }} className="cursor-pointer" title="Delete">
           🗑️
         </div>
         <div
@@ -217,6 +216,6 @@ function Workspace({ title, setTitle, onAddEntry,content,setContent ,entries,set
       <div className=" h-screen ">
         <Editor setContent={ setContent}content={content} config={config} />
       </div>
-    </div></>
+    </div>
   );
 }

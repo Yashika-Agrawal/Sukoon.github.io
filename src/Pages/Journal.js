@@ -1,7 +1,10 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import Editor from "../components/Editor";
 import SideBar from "../components/SideBar";
 import "../App.css";
+import DeleteJournal from "../components/DeleteJournal";
+import { Await } from "react-router-dom";
+import { useAuth0 } from "@auth0/auth0-react";
 
 const config = {
   buttons: [
@@ -31,11 +34,20 @@ const config = {
   ],
 };
 export default function Journal() {
+  const { logout } = useAuth0();
+  const { loginWithRedirect, isAuthenticated } = useAuth0();
+
   const [title, setTitle] = useState("");
   const [content, setContent] = useState("");
   const [entries, setEntries] = useState([]);
-  let [clicked, setClicked] = useState("");
+  const [displayEntries,setDisplayEntries]=useState([]);
+  let [clicked,setClicked]=useState("")
+  
+
+
   function handleAddEntry(content) {
+
+  
     // console.log("cont",content)
     // let str=content;
     let date1 = new Date();
@@ -52,22 +64,26 @@ export default function Journal() {
     setTitle("");
     setContent("");
   }
+
+if(!isAuthenticated){
+
+ return(
+ <div className="h-screen bg-purple-200 flex flex-row overflow-hidden">
+  <SideBar></SideBar>
+  <>Bhai login krle </></div>
+  )
+}
   return (
+    
+
     <>
       <div className="h-screen bg-purple-200 flex flex-row overflow-hidden">
         <SideBar />
-        <SearchJournal
-          entries={entries}
-          setContent={setContent}
-          content={content}
-          title={title}
-          setTitle={setTitle}
-          setClicked={setClicked}
-          clicked={clicked}
-        />
-        <Workspace
-          entries={entries}
-          setEntries={setEntries}
+        <SearchJournal entries={entries} setContent={setContent} content={content} title={title} setTitle={setTitle} setClicked={setClicked} clicked={clicked} displayEntries={displayEntries} setDisplayEntries={setDisplayEntries}/>
+         <Workspace
+         entries={entries}
+         setDisplayEntries={setDisplayEntries}
+        setEntries={setEntries}
           title={title}
           setTitle={setTitle}
           content={content}
@@ -80,15 +96,24 @@ export default function Journal() {
     </>
   );
 }
-function SearchJournal({
-  entries,
-  setContent,
-  content,
-  title,
-  setTitle,
-  setClicked,
-  clicked,
-}) {
+function SearchJournal({ entries,setContent,content,title,setTitle ,setClicked,clicked,displayEntries,setDisplayEntries}) {
+  let [querry,setQuerry]=useState("");
+
+  let handleSearch=()=>{
+    let newArr=entries.filter((ele)=>{
+       return ele.title.toLowerCase().includes(querry.toLowerCase())
+     })
+     setDisplayEntries(newArr)
+    //  setQuerry("")
+   }
+
+   let handleSearch2=(e)=>{
+    let newArr=entries.filter((ele)=>{
+       return ele.title.toLowerCase().includes(e.toLowerCase())
+     })
+     setDisplayEntries(newArr)
+    //  setQuerry("")
+   }
   const months = [
     "Jan",
     "Feb",
@@ -108,28 +133,57 @@ function SearchJournal({
     <div className="bg-white h-screen w-1/4 flex flex-col border-r-2 ">
       <div className=" justify-center bg-gray-100 py-5 text-center ">
         <input
+
+        
           type="text"
           className="rounded-xl py-2 px-3 w-4/5 border-2 border-gray-300"
           placeholder="Search your Journal"
-        />
-      </div>
-      {entries.map((entry, idx) => (
-        <div
-          onClick={() => {
-            if (clicked == entry.date) {
-              setClicked("");
-              setContent("");
-              setTitle("");
-            } else {
-              setClicked(entry.date);
-              console.log("set", setContent);
-              setContent(entry.cont);
-              setTitle(entry.title);
-              console.log("setcon", content);
-            }
+          value={querry}
+          onChange={async(e)=>{
+             await setQuerry(e.target.value)
+              // console.log("jnin",querry)
+             
+              handleSearch2(e.target.value)
+              // handleSearch()
+             
 
-            // console.log(entry.cont)
           }}
+          onKeyPress={(e)=>{
+          
+           
+          
+        }}
+
+        />
+        <button className= "bg-purple-400 rounded-xl mt-2 p-1" onClick={()=>{
+          handleSearch();
+          setQuerry("");
+
+        }}>Search</button>
+      </div>
+      {displayEntries.map((entry,idx) => (
+        
+        <div  onClick={()=>{
+
+          if(clicked==entry.date){
+            setClicked("");
+            setContent("")
+          setTitle("")
+
+          }
+          else{
+            setClicked(entry.date)
+            console.log("set",setContent)
+          setContent(entry.cont)
+          setTitle(entry.title)
+          console.log("setcon",content)
+          }
+
+           
+          // console.log(entry.cont)
+          
+         
+        }}
           key={entry.date.getTime()}
           className="mb-1 border-b-2 border-b-violet-400 flex justify-center bg-violet-300 text-center   cursor-pointer"
           style={{ backgroundColor: clicked == entry.date ? "red" : "" }}
@@ -157,18 +211,14 @@ function SearchJournal({
     </div>
   );
 }
-function Workspace({
-  title,
-  setTitle,
-  onAddEntry,
-  content,
-  setContent,
-  entries,
-  setEntries,
-  clicked,
-  setClicked,
-}) {
+function Workspace({ title, setTitle, onAddEntry,content,setContent ,entries,setEntries,clicked,setClicked,displayEntries,setDisplayEntries}) {
   // const [content, setContent] = useState("");
+ 
+
+  useEffect(()=>{
+   setDisplayEntries(entries)
+  },[entries])
+ let [del,setDel]=useState(false);
   function handleTitle(e) {
     console.log(title);
     setTitle(e.target.value);
@@ -182,42 +232,34 @@ function Workspace({
     setContent("");
   }
   return (
+    <>
+    
     <div className="bg-white h-screen w-3/4 flex flex-col border-r-2 overflow-hidden">
+   {
+     del && <DeleteJournal del={del}setDel={setDel} entries={entries} setEntries={setEntries} clicked={clicked} setContent={setContent} setTitle={setTitle}></DeleteJournal>
+   }
       <div className=" text-2xl items-center space-x-8 justify-end flex flex-row border-b-2  bg-gray-100  text-center ">
-        <div
-          onClick={() => {
-            let date = new Date();
-            entries = entries.map((obj) => {
-              if (obj.date == clicked) {
-                obj.upDate = date;
-                obj.title = title;
-                obj.cont = content;
-              }
-              return obj;
-            });
-            setEntries(entries);
-            setClicked("");
-            setContent("");
-            setTitle("");
-          }}
-          className="cursor-pointer"
-          title="EDIT"
-        >
+        <div onClick={()=>{
+          let date=new Date();
+          entries=entries.map((obj)=>{
+            if(obj.date==clicked){
+              obj.upDate=date;
+              obj.title=title;
+              obj.cont=content;
+              setContent("")
+               setTitle("")
+
+            }
+            return obj
+         })
+         setEntries(entries);
+         setClicked("")
+         
+        }} className="cursor-pointer" title="EDIT">
           ✏️
         </div>
-        <div
-          onClick={() => {
-            entries = entries.filter((obj) => {
-              return obj.date != clicked;
-            });
-            setEntries(entries);
-            // setClicked("")
-            setContent("");
-            setTitle("");
-          }}
-          className="cursor-pointer"
-          title="Delete"
-        >
+        <div onClick={()=>{
+          if(clicked){setDel(true)}}} className="cursor-pointer" title="Delete">
           🗑️
         </div>
         <div
@@ -243,6 +285,6 @@ function Workspace({
       <div className=" h-screen ">
         <Editor setContent={setContent} content={content} config={config} />
       </div>
-    </div>
+    </div></>
   );
 }
