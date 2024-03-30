@@ -6,15 +6,7 @@ export function Quote() {
   });
   let quotes = [];
   async function loadQuotes() {
-    const response = await fetch(
-      "https://type.fit/api/quotes"
-      // {
-      //   method: "GET",
-      //   headers: {
-      //     "X-Api-Key": "ADXsdSkEYE/wuTsIlYFIgg==2WI7roAuJ7BmLRpE",
-      //   },
-      // }
-    );
+    const response = await fetch("https://type.fit/api/quotes");
     quotes = await response.json();
   }
   const random = () => {

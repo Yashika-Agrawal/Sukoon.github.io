@@ -2,7 +2,6 @@ import "./App.css";
 import Home from "./Pages/Home.js";
 import Journal from "./Pages/Journal.js";
 import Book from "./Pages/Book.js";
-
 import Songs from "./Pages/Songs.js";
 import Graph from "./Pages/Graph.js";
 import { Route, Routes } from "react-router-dom";
