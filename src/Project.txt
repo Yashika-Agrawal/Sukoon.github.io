@@ -16,6 +16,7 @@
              -Enteries
                  -date
                  -EntryHeading
+                 -last update
         -WorkSpace
              -HeadBar
                  -Edit

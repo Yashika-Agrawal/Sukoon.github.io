@@ -2,7 +2,7 @@ import React from 'react'
 
 const DeleteJournal = ({del,setDel,entries,clicked,setEntries,setContent,setTitle}) => {
   return (
-    <div className='bg-blue-800 h-full absolute ml-0  w-full'>
+    <div className='bg-white h-full absolute ml-0  w-full'>
     <div className='bg-red rounded-xl text-white my-6 mx-12  flex-col items-center justify-center  w-1/3 bg-black'>
        <div className='h-2/3 p-3 flex justify-center'>
          <h1>Bhai Soch Samajh ke delete Kar...</h1>

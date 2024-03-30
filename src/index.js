@@ -9,6 +9,7 @@ import Journal from "./Pages/Journal";
 import Book from "./Pages/Book";
 import Songs from "./Pages/Songs";
 import Graph from "./Pages/Graph";
+import { Auth0Provider } from "@auth0/auth0-react";
 const router = createBrowserRouter([
   {
     path: "/",
@@ -38,9 +39,18 @@ const router = createBrowserRouter([
 const root = ReactDOM.createRoot(document.getElementById("root"));
 
 root.render(
+
+  <Auth0Provider
+    domain="dev-p62snphmilochw0v.us.auth0.com"
+    clientId="7kw8xfXc9qKgsEXNIGUofZk7kVv31JAx"
+    authorizationParams={{
+      redirect_uri: window.location.origin
+    }}
+  >
   <React.StrictMode>
     <RouterProvider router={router} />
   </React.StrictMode>
+ </Auth0Provider>
 );
 
 // If you want to start measuring performance in your app, pass a function
